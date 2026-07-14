@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لنگر | طعم دریا در دل شهر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --abyss:#061A22;
+    --deep:#0E3B43;
+    --mid:#155C61;
+    --teal:#2C8C87;
+    --gold:#C9A227;
+    --coral:#E4572E;
+    --sand:#F3ECDD;
+    --foam:#FBF8F1;
+    --ink:#0B2027;
+    --line: rgba(243,236,221,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Vazirmatn', sans-serif;
+    background:var(--abyss);
+    color:var(--sand);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3, .display{
+    font-family:'Lalezar', 'Vazirmatn', sans-serif;
+    font-weight:400;
+    line-height:1.25;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  ::selection{background:var(--coral); color:var(--foam);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- fishing-line scroll indicator ---------- */
+  #line-progress{
+    position:fixed; top:0; left:0; right:0; height:52px; z-index:999;
+    pointer-events:none;
+  }
+  #line-svg{width:100%; height:100%; display:block;}
+  #hook-group{transition:transform 0.05s linear;}
+
+  /* ---------- header ---------- */
+  header{
+    position:fixed; top:0; right:0; left:0; z-index:900;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:26px 6vw 14px;
+    transition:background .4s ease, padding .4s ease, box-shadow .4s ease;
+  }
+  header.scrolled{
+    background:rgba(6,26,34,0.86);
+    backdrop-filter:blur(10px);
+    padding:14px 6vw;
+    box-shadow:0 1px 0 var(--line);
+  }
+  .logo{
+    font-family:'Lalezar', sans-serif;
+    font-size:1.6rem;
+    color:var(--sand);
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo svg{width:30px; height:30px;}
+  nav.mainnav{display:flex; gap:34px; font-size:.95rem;}
+  nav.mainnav a{
+    position:relative; padding:4px 0; color:var(--sand); opacity:.85;
+    transition:opacity .25s ease, color .25s ease;
+  }
+  nav.mainnav a::after{
+    content:''; position:absolute; right:0; bottom:-4px; width:0; height:2px;
+    background:var(--coral); transition:width .3s ease;
+  }
+  nav.mainnav a:hover{opacity:1;}
+  nav.mainnav a:hover::after{width:100%;}
+  nav.mainnav a.active{opacity:1; color:var(--gold);}
+
+  .cta-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--coral); color:var(--foam);
+    padding:11px 26px; border-radius:999px; font-size:.92rem; font-weight:600;
+    border:none; cursor:pointer;
+    box-shadow:0 8px 20px rgba(228,87,46,0.28);
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  .cta-btn:hover{transform:translateY(-2px); box-shadow:0 12px 26px rgba(228,87,46,0.4);}
+  .menu-toggle{display:none; background:none; border:none; color:var(--sand); font-size:1.6rem; cursor:pointer;}
+
+  /* ---------- sections base ---------- */
+  section{position:relative; padding:140px 6vw 120px; overflow:hidden;}
+  .eyebrow{
+    font-size:.8rem; letter-spacing:.14em; color:var(--gold);
+    display:flex; align-items:center; gap:10px; margin-bottom:18px;
+    font-weight:600;
+  }
+  .eyebrow::before{content:''; width:26px; height:1px; background:var(--gold);}
+
+  /* ---------- HERO ---------- */
+  #hero{
+    min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+    padding-top:0; background:
+      linear-gradient(180deg, rgba(6,26,34,0.62), rgba(7,30,39,0.78) 55%, rgba(14,59,67,0.88)),
+      radial-gradient(ellipse at 30% 15%, rgba(44,140,135,0.25), transparent 55%),
+      url('https://images.pexels.com/photos/36072128/pexels-photo-36072128.jpeg?auto=compress&cs=tinysrgb&w=1920') center/cover no-repeat,
+      linear-gradient(180deg, var(--abyss), #071E27 60%, var(--deep));
+  }
+  .hero-inner{max-width:900px; z-index:3;}
+  .hero-kicker{
+    font-size:.85rem; letter-spacing:.2em; color:var(--teal); margin-bottom:22px;
+    display:block; font-weight:600;
+  }
+  #hero h1{
+    font-size:clamp(3.6rem, 11vw, 8.5rem);
+    color:var(--foam);
+    text-shadow:0 0 60px rgba(44,140,135,0.35);
+  }
+  #hero h1 span{color:var(--coral);}
+  .hero-sub{
+    max-width:520px; font-size:1.15rem; line-height:2; color:rgba(243,236,221,0.8);
+    margin:26px 0 40px;
+  }
+  .hero-actions{display:flex; align-items:center; gap:26px;}
+  .ghost-link{font-size:.95rem; border-bottom:1px solid var(--sand); padding-bottom:3px; opacity:.85;}
+  .ghost-link:hover{opacity:1; border-color:var(--gold); color:var(--gold);}
+
+  .waves-wrap{position:absolute; bottom:0; left:0; right:0; height:38vh; z-index:1; line-height:0;}
+  .wave-layer{position:absolute; bottom:0; width:200%; height:100%;}
+  .wave-layer svg{width:100%; height:100%;}
+  .wave-1{animation:drift 22s linear infinite;}
+  .wave-2{animation:drift 34s linear infinite reverse; opacity:.55;}
+  @keyframes drift{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+
+  .fish-school{position:absolute; inset:0; z-index:2; pointer-events:none;}
+  .fish{position:absolute; opacity:.55;}
+  .fish svg{width:34px; height:auto;}
+
+  .scroll-cue{
+    position:absolute; bottom:26px; right:50%; transform:translateX(50%);
+    display:flex; flex-direction:column; align-items:center; gap:8px; z-index:3;
+    font-size:.72rem; letter-spacing:.16em; color:var(--sand); opacity:.6;
+  }
+  .scroll-cue .dot{width:6px; height:6px; border-radius:50%; background:var(--gold); animation:bob 1.8s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(10px);}}
+
+  /* section wave dividers */
+  .divider{position:relative; line-height:0; margin-top:-1px;}
+  .divider svg{width:100%; height:80px; display:block;}
+
+  /* ---------- PHILOSOPHY STRIP ---------- */
+  #philosophy{
+    background:var(--deep);
+    padding:90px 6vw;
+    display:flex; flex-wrap:wrap; gap:50px; justify-content:space-between; align-items:flex-start;
+  }
+  .phil-line{
+    font-family:'Lalezar', sans-serif; font-size:clamp(1.6rem,3.4vw,2.4rem);
+    max-width:640px; color:var(--foam); line-height:1.6;
+  }
+  .phil-line em{color:var(--coral); font-style:normal;}
+  .phil-stats{display:flex; gap:44px;}
+  .phil-stat b{display:block; font-family:'Lalezar'; font-size:2.2rem; color:var(--gold);}
+  .phil-stat span{font-size:.82rem; opacity:.75;}
+
+  /* ---------- MENU ---------- */
+  #menu{background:var(--mid);}
+  .section-head{max-width:640px; margin-bottom:70px;}
+  .section-head h2{font-size:clamp(2.4rem,5vw,3.6rem); color:var(--foam);}
+  .section-head p{margin-top:16px; opacity:.8; line-height:1.9; font-size:1.02rem;}
+
+  .menu-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:26px;}
+  .dish{
+    background:rgba(6,26,34,0.35);
+    border:1px solid rgba(243,236,221,0.12);
+    border-radius:18px; padding:32px 28px;
+    opacity:0; transform:translateY(26px);
+    transition:opacity .7s ease, transform .7s ease, border-color .3s ease, background .3s ease;
+  }
+  .dish.in-view{opacity:1; transform:translateY(0);}
+  .dish:hover{border-color:var(--gold); background:rgba(6,26,34,0.55);}
+  .dish-photo{
+    width:100%; height:170px; border-radius:14px; margin-bottom:20px;
+    background-color:rgba(201,162,39,0.12);
+    background-size:cover; background-position:center; background-repeat:no-repeat;
+    border:1px solid rgba(243,236,221,0.1);
+  }
+  .dish-top{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:10px;}
+  .dish h3{font-size:1.35rem; color:var(--foam); font-weight:400;}
+  .dish .price{font-family:'Lalezar'; color:var(--coral); font-size:1.15rem; white-space:nowrap;}
+  .dish p{font-size:.92rem; line-height:1.85; opacity:.72;}
+  .dish .tag{
+    display:inline-block; margin-top:16px; font-size:.72rem; letter-spacing:.06em;
+    color:var(--teal); border:1px solid var(--teal); padding:3px 12px; border-radius:999px;
+  }
+
+  /* ---------- STORY ---------- */
+  #story{
+    background:var(--teal);
+    color:var(--ink);
+    display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:center;
+  }
+  #story .story-text h2{color:var(--ink); font-size:clamp(2.2rem,4.6vw,3.2rem);}
+  #story .story-text p{margin-top:22px; line-height:2; font-size:1.02rem; color:rgba(11,32,39,0.82);}
+  #story .story-text p+p{margin-top:16px;}
+  .signature-line{
+    margin-top:30px; font-family:'Lalezar'; font-size:1.3rem; color:var(--abyss);
+    border-right:3px solid var(--coral); padding-right:16px;
+  }
+  .boat-art{width:100%;}
+  .boat-art svg{width:100%; height:auto;}
+
+  /* ---------- MOMENTS / GALLERY ---------- */
+  #moments{background:var(--gold); color:var(--ink);}
+  #moments .section-head h2{color:var(--ink);}
+  #moments .section-head p{color:rgba(11,32,39,0.75);}
+  .moments-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:150px; gap:16px;
+  }
+  .m-tile{
+    border-radius:16px; position:relative; overflow:hidden;
+    display:flex; align-items:flex-end; padding:18px;
+    background-color:#0E3B43;
+    background-size:cover; background-position:center; background-repeat:no-repeat;
+  }
+  .m-tile::after{
+    content:''; position:absolute; inset:0; z-index:0;
+    background:linear-gradient(180deg, rgba(11,32,39,0.05), rgba(11,32,39,0.85));
+  }
+  .m-tile span{position:relative; z-index:1; color:var(--foam); font-size:.9rem; font-weight:600;}
+  .m1{grid-column:span 2; grid-row:span 2;}
+  .m2{grid-column:span 2;}
+  .m3{grid-column:span 1;}
+  .m4{grid-column:span 1;}
+  .m5{grid-column:span 2;}
+
+  /* ---------- RESERVE ---------- */
+  #reserve{
+    background:var(--sand); color:var(--ink);
+    display:grid; grid-template-columns:.9fr 1.1fr; gap:70px;
+  }
+  #reserve .section-head h2{color:var(--ink);}
+  #reserve .section-head p{color:rgba(11,32,39,0.72);}
+  .hours{margin-top:30px; border-top:1px solid rgba(11,32,39,0.15);}
+  .hours .row{display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(11,32,39,0.15); font-size:.95rem;}
+  .hours .row b{font-weight:600;}
+
+  form{
+    background:var(--foam); border-radius:20px; padding:38px;
+    box-shadow:0 20px 50px rgba(11,32,39,0.08);
+  }
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;}
+  .field{display:flex; flex-direction:column; gap:8px;}
+  .field.full{grid-column:1/-1;}
+  label{font-size:.8rem; opacity:.65;}
+  .field-error{
+    display:none; font-size:.76rem; color:var(--coral); margin-top:2px;
+  }
+  .field.invalid input{border-color:var(--coral);}
+  .field.invalid .field-error{display:block;}
+  input, select, textarea{
+    border:1px solid rgba(11,32,39,0.18); background:transparent;
+    padding:12px 14px; border-radius:10px; font-family:inherit; font-size:.95rem; color:var(--ink);
+    outline:none; transition:border-color .25s ease;
+  }
+  input:focus, select:focus, textarea:focus{border-color:var(--coral);}
+  .submit-btn{
+    width:100%; margin-top:6px; background:var(--ink); color:var(--foam);
+    padding:15px; border:none; border-radius:10px; font-family:inherit; font-size:1rem; font-weight:600;
+    cursor:pointer; transition:background .25s ease, transform .2s ease;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+  }
+  .submit-btn:hover{background:var(--coral); transform:translateY(-2px);}
+  .submit-btn:disabled{opacity:.75; cursor:not-allowed; transform:none;}
+  .spinner{
+    display:none; width:18px; height:18px; border-radius:50%;
+    border:2.5px solid rgba(251,248,241,0.35); border-top-color:var(--foam);
+    animation:spin .7s linear infinite;
+  }
+  .submit-btn.loading .spinner{display:inline-block;}
+  .submit-btn.loading .btn-label{opacity:.85;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .form-note{font-size:.78rem; opacity:.55; margin-top:12px; text-align:center;}
+
+  /* ---------- SUCCESS MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:1000; display:none; align-items:center; justify-content:center;
+    background:rgba(6,26,34,0.72); backdrop-filter:blur(4px);
+    padding:24px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-card{
+    background:var(--foam); color:var(--ink); border-radius:20px; padding:44px 36px;
+    max-width:420px; width:100%; text-align:center;
+    box-shadow:0 30px 70px rgba(0,0,0,0.35);
+    transform:scale(.92); opacity:0; animation:modalIn .35s ease forwards;
+  }
+  @keyframes modalIn{to{transform:scale(1); opacity:1;}}
+  .modal-check{
+    width:64px; height:64px; margin:0 auto 20px; border-radius:50%;
+    background:rgba(44,140,135,0.12); display:flex; align-items:center; justify-content:center;
+  }
+  .modal-check svg{width:36px; height:36px;}
+  .modal-check circle{stroke:var(--teal); stroke-width:2;}
+  .modal-check path{stroke:var(--teal); stroke-width:3; stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:40; stroke-dashoffset:40; animation:draw .5s .2s ease forwards;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .modal-card h3{font-family:'Lalezar'; font-size:1.5rem; margin-bottom:12px;}
+  .modal-card p{font-size:.92rem; line-height:1.8; opacity:.75; margin-bottom:26px;}
+  .modal-close-btn{
+    background:var(--coral); color:var(--foam); border:none; padding:12px 32px;
+    border-radius:999px; font-family:inherit; font-size:.95rem; font-weight:600; cursor:pointer;
+    transition:transform .2s ease;
+  }
+  .modal-close-btn:hover{transform:translateY(-2px);}
+
+  /* ---------- OWNERSHIP VERIFICATION SECTION ---------- */
+  #verifySection{
+    display:flex;
+    align-items:center; justify-content:center;
+    padding:100px 24px;
+    background:
+      radial-gradient(ellipse at 30% 15%, rgba(44,140,135,0.25), transparent 55%),
+      linear-gradient(180deg, var(--abyss), #071E27 60%, var(--deep));
+  }
+  .verify-card{
+    max-width:520px; width:100%;
+    background:rgba(6,26,34,0.55);
+    border:1px solid rgba(243,236,221,0.14);
+    border-radius:20px;
+    padding:48px 38px;
+    text-align:center;
+    box-shadow:0 30px 70px rgba(0,0,0,0.35);
+    backdrop-filter:blur(6px);
+  }
+  .verify-logo{
+    font-family:'Lalezar', sans-serif;
+    font-size:1.7rem;
+    color:var(--sand);
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    margin-bottom:30px;
+  }
+  .verify-logo svg{width:28px; height:28px;}
+  .verify-badge{
+    width:56px; height:56px; margin:0 auto 22px;
+    border-radius:50%;
+    background:rgba(201,162,39,0.12);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .verify-badge svg{width:30px; height:30px;}
+  .verify-card h1{
+    font-family:'Lalezar', sans-serif;
+    font-weight:400;
+    font-size:1.5rem;
+    color:var(--foam);
+    margin-bottom:16px;
+    line-height:1.6;
+  }
+  .verify-card p{
+    font-size:.98rem;
+    line-height:2;
+    color:rgba(243,236,221,0.8);
+    margin-bottom:10px;
+  }
+  .verify-divider{
+    width:40px; height:1px; background:var(--gold);
+    margin:24px auto;
+  }
+  .verify-credit{
+    font-size:.85rem;
+    letter-spacing:.05em;
+    color:var(--gold);
+    font-weight:600;
+  }
+  .verify-credit span{color:var(--coral);}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--ink); color:var(--sand); padding:70px 6vw 30px;}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:50px; padding-bottom:50px; border-bottom:1px solid var(--line);}
+  .footer-logo{font-family:'Lalezar'; font-size:1.7rem; margin-bottom:14px;}
+  .footer-grid p{opacity:.65; line-height:1.9; font-size:.92rem; max-width:320px;}
+  .footer-col h4{font-size:.85rem; letter-spacing:.08em; color:var(--gold); margin-bottom:18px; font-weight:600;}
+  .footer-col a, .footer-col span{display:block; font-size:.92rem; opacity:.75; margin-bottom:12px;}
+  .footer-col a:hover{opacity:1; color:var(--coral);}
+  .social-row{display:flex; gap:14px; margin-top:6px;}
+  .social-row a{
+    width:38px; height:38px; border:1px solid var(--line); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; margin:0;
+    transition:border-color .25s ease, background .25s ease;
+  }
+  .social-row a:hover{border-color:var(--coral); background:rgba(228,87,46,0.12);}
+  .social-row svg{width:16px; height:16px;}
+  .bottom-bar{padding-top:26px; display:flex; justify-content:space-between; font-size:.78rem; opacity:.5; flex-wrap:wrap; gap:10px;}
+
+  .reveal{opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:900px){
+    #story, #reserve{grid-template-columns:1fr;}
+    .moments-grid{grid-template-columns:repeat(2,1fr);}
+    .m1{grid-column:span 2;}
+    .footer-grid{grid-template-columns:1fr; gap:34px;}
+  }
+  @media (max-width:760px){
+    nav.mainnav{
+      position:fixed; top:0; bottom:0; left:0; width:78%; max-width:320px;
+      background:var(--abyss); flex-direction:column; padding:100px 34px; gap:26px;
+      transform:translateX(-100%); transition:transform .4s ease; font-size:1.1rem;
+      box-shadow:8px 0 30px rgba(0,0,0,0.4);
+    }
+    nav.mainnav.open{transform:translateX(0);}
+    .menu-toggle{display:block;}
+    .cta-btn.desktop-only{display:none;}
+    section{padding:110px 6vw 90px;}
+    .phil-stats{gap:28px; flex-wrap:wrap;}
+    .form-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div id="line-progress">
+  <svg id="line-svg" viewBox="0 0 1000 52" preserveAspectRatio="none">
+    <line x1="0" y1="26" x2="1000" y2="26" stroke="rgba(243,236,221,0.15)" stroke-width="1"/>
+    <line id="line-fill" x1="1000" y1="26" x2="1000" y2="26" stroke="#C9A227" stroke-width="2"/>
+    <g id="hook-group">
+      <path d="M0,20 q-8,0 -8,8 q0,8 8,8 q6,0 6,-6" fill="none" stroke="#E4572E" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+  </svg>
+</div>
+
+<header id="site-header">
+  <div class="logo">
+    <svg viewBox="0 0 40 40" fill="none"><path d="M20 4c-2 6-2 10 0 14s2 8 0 14" stroke="#C9A227" stroke-width="2.4" stroke-linecap="round"/><circle cx="20" cy="4" r="2.4" fill="#E4572E"/><path d="M8 24c4 6 8 8 12 8s8-2 12-8" stroke="#F3ECDD" stroke-width="2" stroke-linecap="round"/></svg>
+    لنگر
+  </div>
+  <button class="menu-toggle" id="menuToggle" aria-label="باز کردن منو">☰</button>
+  <nav class="mainnav" id="mainNav">
+    <a href="#philosophy" class="nav-link">فلسفه ما</a>
+    <a href="#menu" class="nav-link">منو</a>
+    <a href="#story" class="nav-link">داستان لنگر</a>
+    <a href="#moments" class="nav-link">لحظه‌ها</a>
+    <a href="#reserve" class="nav-link">رزرو میز</a>
+  </nav>
+  <a href="#reserve" class="cta-btn desktop-only">رزرو میز</a>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <span class="hero-kicker">رستوران دریایی — از سال ۱۳۹۸</span>
+    <h1>لنگر <span>می‌اندازیم</span><br>روی طعم دریا</h1>
+    <p class="hero-sub">صید تازهٔ هر روز، مستقیم از اسکله تا بشقاب شما. لنگر جایی‌ست که دریا داستانش را روی سفره تعریف می‌کند.</p>
+    <div class="hero-actions">
+      <a href="#reserve" class="cta-btn">رزرو میز امشب</a>
+      <a href="#menu" class="ghost-link">دیدن منو</a>
+    </div>
+  </div>
+
+  <div class="fish-school" id="fishSchool"></div>
+
+  <div class="waves-wrap">
+    <div class="wave-layer wave-2">
+      <svg viewBox="0 0 2400 220" preserveAspectRatio="none"><path d="M0,120 C200,180 400,60 600,110 C800,160 1000,50 1200,100 C1400,150 1600,60 1800,110 C2000,160 2200,60 2400,100 L2400,220 L0,220 Z" fill="#155C61"/></svg>
+    </div>
+    <div class="wave-layer wave-1">
+      <svg viewBox="0 0 2400 220" preserveAspectRatio="none"><path d="M0,140 C220,80 420,180 640,120 C860,60 1060,160 1280,110 C1500,60 1700,160 1920,110 C2100,70 2300,150 2400,120 L2400,220 L0,220 Z" fill="#0E3B43"/></svg>
+    </div>
+  </div>
+
+  <div class="scroll-cue"><span>پایین بروید</span><div class="dot"></div></div>
+</section>
+
+<div class="divider"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,10 1440,50 L1440,80 L0,80 Z" fill="#0E3B43"/></svg></div>
+
+<!-- PHILOSOPHY -->
+<section id="philosophy">
+  <p class="phil-line reveal">ما به «تازگی» قسم می‌خوریم؛ <em>صید امروز</em>، تنها مهمانِ سفرهٔ امشب است.</p>
+  <div class="phil-stats reveal">
+    <div class="phil-stat"><b>۶</b><span>ساعت تا اسکله</span></div>
+    <div class="phil-stat"><b>۱۸</b><span>پیش‌غذای دریایی</span></div>
+    <div class="phil-stat"><b>۷</b><span>روز هفته باز</span></div>
+  </div>
+</section>
+
+<div class="divider"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,50 C240,10 480,90 720,40 C960,0 1200,70 1440,30 L1440,80 L0,80 Z" fill="#155C61"/></svg></div>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="section-head reveal">
+    <div class="eyebrow">صید روز</div>
+    <h2>منوی لنگر</h2>
+    <p>گزیده‌ای از پرطرفدارترین غذاهای دریایی ما؛ از خلیج فارس تا دریای خزر، هر طبق یک سفر کوتاه به دل آب‌هاست.</p>
+  </div>
+  <div class="menu-grid">
+
+    <div class="dish">
+      <div class="dish-photo" style="background-image:url('https://images.pexels.com/photos/1510714/pexels-photo-1510714.jpeg?auto=compress&cs=tinysrgb&w=800')"></div>
+      <div class="dish-top"><h3>ماهی سفید کبابی</h3><span class="price">۴۸۵</span></div>
+      <p>ماهی سفید دریای خزر، مزه‌دار شده با نارنج و زعفران، روی زغال بلوط دودی شده.</p>
+      <span class="tag">صید خزر</span>
+    </div>
+
+    <div class="dish">
+      <div class="dish-photo" style="background-image:url('https://images.pexels.com/photos/8633745/pexels-photo-8633745.jpeg?auto=compress&cs=tinysrgb&w=800')"></div>
+      <div class="dish-top"><h3>میگوی سیر و لیمو</h3><span class="price">۳۹۰</span></div>
+      <p>میگوی جنوب تفت داده‌شده با سیر تازه، لیموترش و فلفل قرمز؛ سریع، تند و تازه.</p>
+      <span class="tag">صید جنوب</span>
+    </div>
+
+    <div class="dish">
+      <div class="dish-photo" style="background-image:url('https://images.pexels.com/photos/4445243/pexels-photo-4445243.jpeg?auto=compress&cs=tinysrgb&w=800')"></div>
+      <div class="dish-top"><h3>صدف‌های بخارپز</h3><span class="price">۵۲۰</span></div>
+      <p>صدف‌های تازهٔ روز، بخارپز شده با شراب سفید، سیر و جعفری معطر.</p>
+      <span class="tag">پیشنهاد سرآشپز</span>
+    </div>
+
+    <div class="dish">
+      <div class="dish-photo" style="background-image:url('https://images.pexels.com/photos/12089286/pexels-photo-12089286.jpeg?auto=compress&cs=tinysrgb&w=800')"></div>
+      <div class="dish-top"><h3>سوپ دریایی لنگر</h3><span class="price">۲۹۰</span></div>
+      <p>ترکیبی از ماهی، میگو و صدف در آبگوشتِ گوجه و زعفران، سرو با نان بربری تازه.</p>
+      <span class="tag">پرطرفدار</span>
+    </div>
+
+    <div class="dish">
+      <div class="dish-photo" style="background-image:url('https://images.pexels.com/photos/1516415/pexels-photo-1516415.jpeg?auto=compress&cs=tinysrgb&w=800')"></div>
+      <div class="dish-top"><h3>سالمون گریل با آووکادو</h3><span class="price">۵۷۵</span></div>
+      <p>فیله سالمون نروژی، پوستِ کاراملی، همراه سس آووکادو و ریحان تازه.</p>
+      <span class="tag">جدید</span>
+    </div>
+
+    <div class="dish">
+      <div class="dish-photo" style="background-image:url('https://images.unsplash.com/photo-1515443961218-a51367888e4b?fm=jpg&q=80&w=900&auto=format&fit=crop')"></div>
+      <div class="dish-top"><h3>پلوی زعفرانی با میگو</h3><span class="price">۴۴۰</span></div>
+      <p>برنج ایرانی دم‌کرده با زعفران اصفهان، میگوی سرخ‌شده و کشمش سرآشپز.</p>
+      <span class="tag">سنتی</span>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,30 C240,80 480,10 720,50 C960,90 1200,20 1440,60 L1440,80 L0,80 Z" fill="#2C8C87"/></svg></div>
+
+<!-- STORY -->
+<section id="story">
+  <div class="story-text reveal">
+    <div class="eyebrow">داستان لنگر</div>
+    <h2>از قایقی کوچک در اسکلهٔ بندرعباس</h2>
+    <p>لنگر با یک قایق صیادی کوچک و یک عشق قدیمی به دریا شروع شد. مؤسسانِ ما هر بامداد به دنبال بهترین صید روز به اسکله می‌رفتند، تا وقتی تصمیم گرفتند این تازگی را مستقیم به سفرهٔ شهر بیاورند.</p>
+    <p>امروز، لنگر همان فلسفه را دنبال می‌کند: بدون واسطه، بدون انبار، فقط صید امروز و دستانی که می‌دانند با آن چه کنند.</p>
+    <p class="signature-line">«دریا را که ببری به آشپزخانه، دیگر رستوران نیستی؛ اسکله‌ای هستی.»</p>
+  </div>
+  <div class="boat-art reveal">
+    <svg viewBox="0 0 400 320" fill="none">
+      <path d="M40 240 Q200 210 360 240 L340 270 Q200 290 60 270 Z" fill="#0B2027"/>
+      <path d="M200 240 L200 60" stroke="#0B2027" stroke-width="4"/>
+      <path d="M204 70 L280 200 L204 200 Z" fill="#F3ECDD"/>
+      <path d="M196 90 L140 200 L196 200 Z" fill="#FBF8F1"/>
+      <path d="M0 250 Q100 230 200 250 T400 250" stroke="#0B2027" stroke-width="3" fill="none" opacity=".5"/>
+      <path d="M0 265 Q100 245 200 265 T400 265" stroke="#0B2027" stroke-width="3" fill="none" opacity=".35"/>
+      <circle cx="330" cy="80" r="26" fill="#C9A227" opacity=".8"/>
+    </svg>
+  </div>
+</section>
+
+<div class="divider"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,50 C240,0 480,90 720,40 C960,0 1200,80 1440,30 L1440,80 L0,80 Z" fill="#C9A227"/></svg></div>
+
+<!-- MOMENTS -->
+<section id="moments">
+  <div class="section-head reveal">
+    <div class="eyebrow">فضای لنگر</div>
+    <h2>لحظه‌هایی کنار آب</h2>
+    <p>نشستن کنار پنجره‌ای رو به دریا، صدای موج و بوی زعفران؛ لنگر تجربه‌ای‌ست، نه فقط یک وعدهٔ غذایی.</p>
+  </div>
+  <div class="moments-grid reveal">
+    <div class="m-tile m1" style="background-image:url('https://images.unsplash.com/photo-1756680967373-c3205a8a8b31?fm=jpg&q=80&w=1200&auto=format&fit=crop')"><span>تراس رو به دریا</span></div>
+    <div class="m-tile m2" style="background-image:url('https://images.unsplash.com/photo-1669411305774-1aaf7dcca48c?fm=jpg&q=80&w=1200&auto=format&fit=crop')"><span>سالن اصلی</span></div>
+    <div class="m-tile m3" style="background-image:url('https://images.unsplash.com/photo-1727205604222-6979828b5f8f?fm=jpg&q=80&w=900&auto=format&fit=crop')"><span>بار صدف</span></div>
+    <div class="m-tile m4" style="background-image:url('https://images.unsplash.com/photo-1760169799369-2b8574466735?fm=jpg&q=80&w=900&auto=format&fit=crop')"><span>آشپزخانهٔ باز</span></div>
+    <div class="m-tile m5" style="background-image:url('https://images.unsplash.com/photo-1634043270873-f2f830e5d4bf?fm=jpg&q=80&w=1200&auto=format&fit=crop')"><span>غروب اسکله</span></div>
+  </div>
+</section>
+
+<!-- RESERVE -->
+<section id="reserve">
+  <div class="reveal">
+    <div class="eyebrow">میز خودتان را نگه دارید</div>
+    <h2>رزرو میز</h2>
+    <p>برای رزرو در ساعات پرمشتری، حداقل یک روز زودتر با ما تماس بگیرید یا فرم را پر کنید.</p>
+    <div class="hours">
+      <div class="row"><span>شنبه تا چهارشنبه</span><b>۱۲:۰۰ تا ۲۳:۰۰</b></div>
+      <div class="row"><span>پنجشنبه و جمعه</span><b>۱۲:۰۰ تا ۰۰:۳۰</b></div>
+      <div class="row"><span>تلفن رزرو</span><b>۰۲۱-۱۲۳۴۵۶۷</b></div>
+    </div>
+  </div>
+
+  <form class="reveal" id="reserveForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+    <div class="form-row">
+      <div class="field"><label>نام و نام خانوادگی</label><input type="text" name="نام" id="fName" placeholder="مثلاً: سارا محمدی" required></div>
+      <div class="field"><label>شماره تماس</label><input type="tel" name="تلفن" id="fPhone" placeholder="۰۹۱۲۱۲۳۴۵۶۷" inputmode="numeric" required>
+        <span class="field-error" id="phoneError">شمارهٔ موبایل معتبر ایرانی وارد کنید (مثال: 09121234567)</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field full"><label>ایمیل</label><input type="email" name="ایمیل" id="fEmail" placeholder="you@example.com" required>
+        <span class="field-error" id="emailError">ایمیل معتبر وارد کنید</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>تاریخ</label><input type="date" name="تاریخ" id="fDate" required>
+        <span class="field-error" id="dateError">تاریخ نمی‌تواند در گذشته باشد</span>
+      </div>
+      <div class="field"><label>ساعت</label><input type="time" name="ساعت" required></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>تعداد مهمانان</label><input type="number" name="تعداد_مهمانان" min="1" max="30" value="2" required></div>
+      <div class="field"><label>مناسبت</label>
+        <select name="مناسبت">
+          <option value="رزرو معمولی">رزرو معمولی</option>
+          <option value="تولد">تولد</option>
+          <option value="سالگرد">سالگرد</option>
+          <option value="جلسهٔ کاری">جلسهٔ کاری</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field full"><label>ترجیح محل نشستن</label>
+        <select name="محل_نشستن">
+          <option value="داخل سالن">داخل سالن</option>
+          <option value="کنار پنجره">کنار پنجره</option>
+          <option value="تراس">تراس</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field full"><label>توضیحات (اختیاری)</label><textarea name="توضیحات" rows="3" placeholder="مثلاً: میز کنار پنجره"></textarea></div>
+    </div>
+    <button class="submit-btn" type="submit">
+      <span class="btn-label">ثبت رزرو</span>
+      <span class="spinner" aria-hidden="true"></span>
+    </button>
+    <p class="form-note" id="formNote">با ثبت این فرم، درخواست رزرو مستقیم برای ما ایمیل می‌شود.</p>
+  </form>
+</section>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-card">
+    <div class="modal-check">
+      <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="none"/><path fill="none" d="M14 27l7 7 17-17"/></svg>
+    </div>
+    <h3>رزرو شما با موفقیت ثبت شد</h3>
+    <p>به‌زودی برای تأیید نهایی با شما تماس می‌گیریم. منتظر دیدارتان در لنگر هستیم.</p>
+    <button class="modal-close-btn" id="modalCloseBtn">متوجه شدم</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">لنگر</div>
+      <p>رستوران دریایی لنگر؛ جایی که صید امروز، داستان امشب سفرهٔ شماست. با عشق به دریا، از سال ۱۳۹۸.</p>
+      <div class="social-row">
+        <a href="#" aria-label="اینستاگرام"><svg viewBox="0 0 24 24" fill="none" stroke="#F3ECDD" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="#" aria-label="تلگرام"><svg viewBox="0 0 24 24" fill="none" stroke="#F3ECDD" stroke-width="1.6"><path d="M22 3L2 11l6 2m14-10l-4 18-8-6m12-12L8 13"/></svg></a>
+        <a href="#" aria-label="واتس‌اپ"><svg viewBox="0 0 24 24" fill="none" stroke="#F3ECDD" stroke-width="1.6"><path d="M4 20l1.4-4A8 8 0 1112 20a8 8 0 01-4-1.1L4 20z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>دسترسی سریع</h4>
+      <a href="#menu">منو</a>
+      <a href="#story">داستان لنگر</a>
+      <a href="#moments">فضای رستوران</a>
+      <a href="#reserve">رزرو میز</a>
+    </div>
+    <div class="footer-col">
+      <h4>تماس</h4>
+      <span>بندرعباس، بلوار ساحلی، اسکلهٔ شمارهٔ ۴</span>
+      <span>۰۲۱-۱۲۳۴۵۶۷</span>
+      <span>hello@langar-restaurant.ir</span>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <span>© ۱۴۰۳ رستوران لنگر. تمامی حقوق محفوظ است.</span>
+    <span>طراحی با عشق به دریا 🌊</span>
+  </div>
+</footer>
+
+<script>
+  // header scroll state
+  const header = document.getElementById('site-header');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sections = document.querySelectorAll('section[id]');
+
+  function onScroll(){
+    if(window.scrollY > 40) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+
+    // fishing line progress
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+    const fill = document.getElementById('line-fill');
+    const startX = 1000 - progress * 1000;
+    fill.setAttribute('x1', startX);
+    document.getElementById('hook-group').setAttribute('transform', `translate(${startX},0)`);
+
+    // active nav link
+    let current = '';
+    sections.forEach(sec=>{
+      const rect = sec.getBoundingClientRect();
+      if(rect.top <= 120 && rect.bottom >= 120) current = sec.id;
+    });
+    navLinks.forEach(l=>{
+      l.classList.toggle('active', l.getAttribute('href') === '#'+current);
+    });
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal, .dish');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // mobile menu
+  const toggle = document.getElementById('menuToggle');
+  const nav = document.getElementById('mainNav');
+  toggle.addEventListener('click', ()=> nav.classList.toggle('open'));
+  navLinks.forEach(l=>l.addEventListener('click', ()=> nav.classList.remove('open')));
+
+  // fish school in hero
+  const fishSVG = `<svg viewBox="0 0 60 30" fill="none"><path d="M2 15c10-10 36-10 46 0-10 10-36 10-46 0z" fill="#F3ECDD"/><path d="M2 15l-10-8v16z" fill="#F3ECDD"/><circle cx="38" cy="12" r="1.6" fill="#0B2027"/></svg>`;
+  const school = document.getElementById('fishSchool');
+  const fishCount = window.innerWidth < 760 ? 4 : 8;
+  for(let i=0;i<fishCount;i++){
+    const f = document.createElement('div');
+    f.className = 'fish';
+    f.innerHTML = fishSVG;
+    const top = 10 + Math.random()*55;
+    const dur = 18 + Math.random()*14;
+    const delay = Math.random()*-20;
+    const scale = 0.6 + Math.random()*0.9;
+    f.style.top = top+'%';
+    f.style.left = '110%';
+    f.style.transform = `scale(${scale})`;
+    f.style.animation = `swim ${dur}s linear ${delay}s infinite`;
+    school.appendChild(f);
+  }
+  const styleTag = document.createElement('style');
+  styleTag.textContent = `@keyframes swim{from{left:110%;} to{left:-15%;}}`;
+  document.head.appendChild(styleTag);
+
+  // reservation form -> Formspree (AJAX, no page reload) with validation, spinner, success modal
+  const reserveForm = document.getElementById('reserveForm');
+  const formNote = document.getElementById('formNote');
+  const dateInput = document.getElementById('fDate');
+  const phoneInput = document.getElementById('fPhone');
+  const emailInput = document.getElementById('fEmail');
+  const successModal = document.getElementById('successModal');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+  // prevent selecting past dates
+  const todayISO = new Date().toISOString().split('T')[0];
+  dateInput.setAttribute('min', todayISO);
+
+  const iranMobileRegex = /^(0|\+98|0098)?9\d{9}$/;
+
+  function setFieldValid(input, valid){
+    const wrap = input.closest('.field');
+    wrap.classList.toggle('invalid', !valid);
+  }
+
+  function validateForm(){
+    let valid = true;
+
+    if(!phoneInput.value.trim() || !iranMobileRegex.test(phoneInput.value.trim().replace(/\s/g,''))){
+      setFieldValid(phoneInput, false);
+      valid = false;
+    } else {
+      setFieldValid(phoneInput, true);
+    }
+
+    const emailOk = emailInput.value.trim().length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim());
+    setFieldValid(emailInput, emailOk);
+    if(!emailOk) valid = false;
+
+    const dateOk = dateInput.value && dateInput.value >= todayISO;
+    setFieldValid(dateInput, dateOk);
+    if(!dateOk) valid = false;
+
+    return valid;
+  }
+
+  function openSuccessModal(){
+    successModal.classList.add('open');
+  }
+  modalCloseBtn.addEventListener('click', ()=> successModal.classList.remove('open'));
+  successModal.addEventListener('click', (e)=>{ if(e.target === successModal) successModal.classList.remove('open'); });
+
+  reserveForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    formNote.style.color = '';
+
+    if(!reserveForm.checkValidity()){
+      reserveForm.reportValidity();
+      return;
+    }
+    if(!validateForm()){
+      formNote.textContent = 'لطفاً خطاهای فرم را برطرف کنید.';
+      formNote.style.color = '#E4572E';
+      return;
+    }
+
+    const btn = reserveForm.querySelector('.submit-btn');
+
+    if(reserveForm.action.includes('YOUR_FORM_ID')){
+      formNote.textContent = 'برای فعال شدن این فرم، باید فرم‌آیدی Formspree را در کد جایگزین کنید.';
+      formNote.style.color = '#E4572E';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+    try{
+      const res = await fetch(reserveForm.action, {
+        method: 'POST',
+        body: new FormData(reserveForm),
+        headers: { 'Accept': 'application/json' }
+      });
+      if(res.ok){
+        formNote.textContent = 'به‌زودی برای تأیید رزرو با شما تماس می‌گیریم.';
+        reserveForm.reset();
+        dateInput.setAttribute('min', todayISO);
+        openSuccessModal();
+      } else {
+        throw new Error('submit failed');
+      }
+    } catch(err){
+      formNote.textContent = 'ارسال با خطا مواجه شد؛ لطفاً با شمارهٔ رزرو تماس بگیرید.';
+      formNote.style.color = '#E4572E';
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    }
+  });
+</script>
+
+<section id="verifySection">
+  <div class="verify-card">
+    <div class="verify-logo">
+      <svg viewBox="0 0 40 40" fill="none"><path d="M20 4c-2 6-2 10 0 14s2 8 0 14" stroke="#C9A227" stroke-width="2.4" stroke-linecap="round"/><circle cx="20" cy="4" r="2.4" fill="#E4572E"/><path d="M8 24c4 6 8 8 12 8s8-2 12-8" stroke="#F3ECDD" stroke-width="2" stroke-linecap="round"/></svg>
+      لنگر
+    </div>
+    <div class="verify-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#C9A227" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+    </div>
+    <h1>تیم محترم انجام میدم</h1>
+    <p>این صفحه صرفاً جهت بررسی و تأیید مالکیت نمونه‌کار ایجاد شده است.</p>
+    <div class="verify-divider"></div>
+    <p class="verify-credit">طراح و توسعه‌دهنده: <span>Sama</span></p>
+  </div>
+</section>
+
+</body>
+</html>
